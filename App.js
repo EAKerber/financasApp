@@ -1,27 +1,20 @@
+import 'react-native-gesture-handler';
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import {View, StatusBar} from 'react-native';
+
+import firebase from './src/services/firebaseConnection';
+import {Container, TextoTemp} from './src/styles/styles';
+
+import Routes from './src/routes/index';
 
 function App(){
   return(
-    <View style={styles.container}>
-
-      <Text style={styles.texto_temp}>Repositório git</Text>
-
-    </View>
+    <NavigationContainer>
+      <StatusBar backgroundColor='#151515' barStyle='light-content'/>
+      <Routes/>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container:{
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#2d2d2d'
-  },
-  texto_temp:{
-    color: '#fff',
-    fontSize: 28,
-  },
-});
 
 export default App;
