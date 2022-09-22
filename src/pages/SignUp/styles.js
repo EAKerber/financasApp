@@ -27,19 +27,6 @@ export const Input = styled.TextInput.attrs({
     width: 90%;
 `;
 
-export const Link = styled.TouchableOpacity`
-    margin-top: 5px;
-    margin-bottom: 10px;
-`;
-
-export const LinkText = styled.Text`
-    color: #fff;
-`;
-
-export const Logo = styled.Image`
-    margin-bottom: 35px;
-`;
-
 export const SubmitButton = styled.TouchableOpacity`
     align-items: center;
     justify-content: center;

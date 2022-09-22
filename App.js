@@ -4,7 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import {View, StatusBar} from 'react-native';
 
 import firebase from './src/services/firebaseConnection';
-import {Container, TextoTemp} from './src/styles/styles';
+import {} from './src/styles/styles';
 
 import Routes from './src/routes/index';
 
