@@ -7,7 +7,7 @@ const AppDrawer = createDrawerNavigator();
 
 function AppRoutes(){
     return(
-        <AppDrawer.Navigator nitialRouteName="Home" >
+        <AppDrawer.Navigator>
             
             <AppDrawer.Screen
                 name='Home'
