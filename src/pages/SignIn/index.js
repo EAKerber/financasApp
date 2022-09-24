@@ -1,12 +1,14 @@
-import React, {useState} from 'react';
-import {Platform} from 'react-native';
+import React, { useState, useContext } from 'react';
+import { Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-import {  AreaInput, Background, 
-          Container, Input, Link, 
-          LinkText, Logo, SubmitButton,
-          SubmitText,
-        } from './styles';
+import { AuthContext } from '../../contexts/auth';
+import {
+  AreaInput, Background,
+  Container, Input, Link,
+  LinkText, Logo, SubmitButton,
+  SubmitText,
+} from './styles';
 
 function SignIn() {
 
@@ -15,32 +17,34 @@ function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const { user } = useContext(AuthContext);
+
   return (
     <Background>
       <Container
-        behavior={Platform.OS === 'ios'? 'padding': ''}
+        behavior={Platform.OS === 'ios' ? 'padding' : ''}
         enabled
       >
 
         <Logo source={require('../../assets/Logo.png')} />
 
         <AreaInput>
-          <Input 
+          <Input
             placeholder='Email'
             autoCorrect={false}
             autoCapitalize='none'
             value={email}
-            onChangeText={(text)=>setEmail(text)}
+            onChangeText={(text) => setEmail(text)}
           />
         </AreaInput>
 
         <AreaInput>
-          <Input 
+          <Input
             placeholder='Senha'
             autoCorrect={false}
             autoCapitalize='none'
             value={password}
-            onChangeText={(text)=>setPassword(text)}
+            onChangeText={(text) => setPassword(text)}
           />
         </AreaInput>
 
@@ -48,7 +52,7 @@ function SignIn() {
           <SubmitText>Acessar</SubmitText>
         </SubmitButton>
 
-        <Link onPress={()=>navigation.navigate('SignUp')}>
+        <Link onPress={() => navigation.navigate('SignUp')}>
           <LinkText>Criar uma conta!</LinkText>
         </Link>
 
