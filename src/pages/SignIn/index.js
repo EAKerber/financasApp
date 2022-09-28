@@ -16,8 +16,11 @@ function SignIn() {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { signIn } = useContext(AuthContext);
 
-  const { user } = useContext(AuthContext);
+  function handleSignIn(){
+    signIn(email, password);
+  }
 
   return (
     <Background>
@@ -48,7 +51,9 @@ function SignIn() {
           />
         </AreaInput>
 
-        <SubmitButton>
+        <SubmitButton
+          onPress={handleSignIn}
+        >
           <SubmitText>Acessar</SubmitText>
         </SubmitButton>
 
