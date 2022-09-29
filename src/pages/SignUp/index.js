@@ -51,6 +51,7 @@ function SignUp() {
 
         <AreaInput>
           <Input
+            secureTextEntry={true}
             placeholder='Senha'
             autoCorrect={false}
             autoCapitalize='none'

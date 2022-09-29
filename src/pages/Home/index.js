@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Button } from 'react-native';
 
 import { AuthContext } from '../../contexts/auth';
 
 function Home() {
 
-    const { user } = useContext(AuthContext);
+    const { user, signOut } = useContext(AuthContext);
 
     return (
         <View>
@@ -13,6 +13,10 @@ function Home() {
             <Text>{user?.nome}</Text>
             <Text>{user?.uid}</Text>
             <Text>{user?.email}</Text>
+            <Button
+                title='deslogar'
+                onPress={signOut}
+            />
         </View>
     );
 }

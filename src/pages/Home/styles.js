@@ -13,8 +13,3 @@ export const Container = styled.View`
     justify-content: center;
     background-color: #2d2d2d;
 `;
-
-
-export const Logo = styled.Image`
-
-`;

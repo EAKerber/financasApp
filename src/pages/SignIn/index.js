@@ -43,6 +43,7 @@ function SignIn() {
 
         <AreaInput>
           <Input
+            secureTextEntry={true}
             placeholder='Senha'
             autoCorrect={false}
             autoCapitalize='none'

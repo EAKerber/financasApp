@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { View, ActivityIndicator } from 'react-native';
+import { LoadingBackground, LoadingIndicator } from '../styles/routes_style';
 
 import AuthRoutes from './auth.routes';
 import AppRoutes from './app.routes';
@@ -10,12 +10,9 @@ function Routes() {
 
     if(loading){
         return(
-            <View style={{flex: 1, justifyContent: 'center', alignItems:'center', backgroundColor:'#151515'}}>
-                <ActivityIndicator
-                    size='large'
-                    color='#00b94a'
-                />
-            </View>
+            <LoadingBackground>
+                <LoadingIndicator/>
+            </LoadingBackground>
         )
     }
 

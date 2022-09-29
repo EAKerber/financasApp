@@ -6,7 +6,7 @@ import AuthProvider from './src/contexts/auth';
 import { } from './src/styles/styles';
 import Routes from './src/routes/index';
 
-import { View, StatusBar } from 'react-native';
+import { StatusBar } from 'react-native';
 
 
 

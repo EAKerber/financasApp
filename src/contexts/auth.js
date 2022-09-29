@@ -11,11 +11,13 @@ function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
+    
+
     useEffect(()=>{
-        async function loadUser(){
+        async function loadUser(){ 
             let data = await retriveUser();
-            data&&setUser(data);
-            setLoading(false);            
+            setLoading(false); 
+            data&&setUser(data);          
         }
         loadUser();
     },[]);
@@ -25,6 +27,7 @@ function AuthProvider({ children }) {
     async function signIn(email, password){
         await firebase.auth().signInWithEmailAndPassword(email, password)
         .then(async (value)=>{
+            setLoading(true);
             let uid = value.user.uid;
             await firebase.database().ref('users').child(uid).once('value')
             .then((snapshot)=>{
@@ -34,7 +37,11 @@ function AuthProvider({ children }) {
                     email: value.user.email,
                 }
                 setUser(data);
-                storageUser(data);
+                storageUser(data).then(()=>{
+                    setLoading(false);
+                }).catch((error)=>{
+                    console.log(error);
+                });                
             })
             .catch((error)=>{
                 console.log(error);
@@ -50,6 +57,7 @@ function AuthProvider({ children }) {
     async function signUp(email, password, name){
         await firebase.auth().createUserWithEmailAndPassword(email, password)
         .then(async (value)=>{
+            setLoading(true);
             let uid = value.user.uid;
             await firebase.database().ref('users').child(uid)
             .set({
@@ -63,7 +71,11 @@ function AuthProvider({ children }) {
                     email: value.user.email,
                 }
                 setUser(data);
-                storageUser(data);
+                storageUser(data).then(()=>{
+                    setLoading(false);
+                }).catch((error)=>{
+                    console.log(error);
+                }); 
             })
             .catch((error)=>{
                 console.log(error);
@@ -72,6 +84,27 @@ function AuthProvider({ children }) {
         .catch((error)=>{
             console.log(error);
         });
+    }
+
+    //Deslogar usuário
+
+    async function signOut(){
+        setLoading(true);
+        await firebase.auth().signOut()
+        .then(async ()=>{
+            await clearUser()
+            .then(()=>{
+                setUser(null);
+                setLoading(false);
+            })
+            .catch((error)=>{
+                console.log(error)
+            });;
+        })
+        .catch((error)=>{
+            console.log(error);
+        });
+
     }
 
     //Salvar usuário logado
@@ -90,9 +123,16 @@ function AuthProvider({ children }) {
         .catch((error)=>{console.log(error)});
     }
 
+    //Limpar usuário salvo
+
+    async function clearUser(){
+        await AsyncStorage.clear()
+        .catch((error)=>{console.log(error)});
+    }
+
     return (
         <AuthContext.Provider
-            value={{ signed:!!user, user, loading, signUp, signIn}}
+            value={{ signed:!!user, user, loading, signUp, signIn, signOut}}
         >
             {children}
         </AuthContext.Provider>
