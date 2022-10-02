@@ -1,23 +1,26 @@
 import React, { useContext } from 'react';
-import { View, Text, Button } from 'react-native';
+
+import { 
+    Background, Container, 
+    Nome, Saldo, Title,
+} from './styles';
 
 import { AuthContext } from '../../contexts/auth';
+import Header from '../../components/Header/index';
 
 function Home() {
 
-    const { user, signOut } = useContext(AuthContext);
+    const { user } = useContext(AuthContext);
 
     return (
-        <View>
-            <Text>Home</Text>
-            <Text>{user?.nome}</Text>
-            <Text>{user?.uid}</Text>
-            <Text>{user?.email}</Text>
-            <Button
-                title='deslogar'
-                onPress={signOut}
-            />
-        </View>
+        <Background>
+            <Header/>
+            <Container>
+                <Nome>{user.nome}</Nome>
+                <Saldo>123123</Saldo>
+            </Container>
+            <Title>Ultimas Movimentações</Title>
+        </Background>
     );
 }
 

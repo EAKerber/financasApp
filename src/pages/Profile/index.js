@@ -7,6 +7,7 @@ import {
     NewText, Nome,
 } from './styles';
 
+import Header from '../../components/Header/index';
 import { AuthContext } from '../../contexts/auth';
 
 function Profile() {
@@ -16,6 +17,7 @@ function Profile() {
 
     return (
         <Container>
+            <Header/>
             <Nome>{user&&user.nome}</Nome>
             <NewLink
                 onPress={()=>{navigator.navigate('Resgistrar')}}
