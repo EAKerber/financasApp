@@ -10,6 +10,18 @@ export const Container = styled.View`
     margin-bottom: 25px;
 `;
 
+export const List = styled.FlatList.attrs({
+    marginHorizontal: 15,
+    contentContainerStyle:{ paddingBottom: 15 },
+})`
+    background-color: #fff;
+    margin-left: 10px;
+    margin-right: 10px;
+    padding-top: 10px;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+`;
+
 export const Nome = styled.Text`
     font-size: 20px;
     font-style: italic;
