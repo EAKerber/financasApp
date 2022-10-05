@@ -28,7 +28,7 @@ function Home() {
         <Background>
             <Header/>
             <Container>
-                <Nome>{user.nome}</Nome>
+                <Nome>{user&&user.nome}</Nome>
                 <Saldo>123123</Saldo>
             </Container>
             <Title>Ultimas Movimentações</Title>
