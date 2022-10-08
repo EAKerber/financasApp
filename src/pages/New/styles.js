@@ -6,15 +6,15 @@ export const Background = styled.View`
 `;
 
 export const Input = styled.TextInput.attrs({
-    placeholderTextColor: '#444',
+    placeholderTextColor: '#686868',
 })`
-    height: 50px;
+    height: 55px;
     width: 90%;
     background-color: rgba(255,255,255,0.9);
     margin-top: 30px;
-    font-size: 17px;
-    padding-left: 10px;
-    padding-right: 10px;
+    font-size: 16px;
+    padding-left: 15px;
+    padding-right: 15px;
 `;
 
 export const KeyboardDismiss = styled.TouchableWithoutFeedback`
