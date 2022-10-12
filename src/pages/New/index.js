@@ -106,6 +106,9 @@ function New() {
                         keyboardType='numeric'
                         returnKeyType='next'
                         onChangeText={(value)=>{setValue(value)}}
+                        onEndEditing={(value)=>{
+                            setValue(value.nativeEvent.text.replace(/ |-/g, '').replace(/,/g, '.'));
+                        }}
                         onSubmitEditing={()=>{Keyboard.dismiss()}}
                     />
                     <Picker onChange={setType} type={type}/>

@@ -13,18 +13,18 @@ function HistoricoItem({data}){
         <Container>
             <TipoView>
                 <IconView 
-                    tipo = {data?.tipo}
+                    tipo = {data?.type}
                 >
                     <Icon 
-                        name= {data?.tipo==='receita'?'arrow-up':'arrow-down'} 
+                        name= {data?.type==='receita'?'arrow-up':'arrow-down'} 
                         color='#fff' 
                         size={20} 
                     />
-                    <TipoText>{data?.tipo}</TipoText>
+                    <TipoText>{data?.type}</TipoText>
                 </IconView>
             </TipoView>
 
-            <ValorText>{'R$ '+data?.valor}</ValorText>
+            <ValorText>{'R$ '+data?.value.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}</ValorText>
         </Container>
     );
 }
