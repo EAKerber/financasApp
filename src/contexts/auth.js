@@ -10,6 +10,7 @@ function AuthProvider({ children }) {
 
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [checking, setChecking] = useState(false);
 
     
 
@@ -25,6 +26,7 @@ function AuthProvider({ children }) {
     //logar usuário
 
     async function signIn(email, password){
+        setChecking(true);
         await firebase.auth().signInWithEmailAndPassword(email, password)
         .then(async (value)=>{
             setLoading(true);
@@ -38,23 +40,28 @@ function AuthProvider({ children }) {
                 }
                 setUser(data);
                 storageUser(data).then(()=>{
+                    setChecking(false);
                     setLoading(false);
                 }).catch((error)=>{
+                    setChecking(false);
                     console.log(error);
                 });                
             })
             .catch((error)=>{
+                setChecking(false);
                 console.log(error);
             });
         })
         .catch((error)=>{
-            console.log(error);
+            alert(error.code);
+            setChecking(false);
         });
     }
 
     //criar conta
 
     async function signUp(email, password, name){
+        setChecking(true);
         await firebase.auth().createUserWithEmailAndPassword(email, password)
         .then(async (value)=>{
             setLoading(true);
@@ -72,17 +79,21 @@ function AuthProvider({ children }) {
                 }
                 setUser(data);
                 storageUser(data).then(()=>{
+                    setChecking(false);
                     setLoading(false);
                 }).catch((error)=>{
+                    setChecking(false);
                     console.log(error);
                 }); 
             })
             .catch((error)=>{
+                setChecking(false);
                 console.log(error);
             });
         })
         .catch((error)=>{
-            console.log(error);
+            alert(error.code);
+            setChecking(false);
         });
     }
 
@@ -132,7 +143,7 @@ function AuthProvider({ children }) {
 
     return (
         <AuthContext.Provider
-            value={{ signed:!!user, user, loading, signUp, signIn, signOut}}
+            value={{ signed:!!user, user, checking, loading, signUp, signIn, signOut}}
         >
             {children}
         </AuthContext.Provider>
