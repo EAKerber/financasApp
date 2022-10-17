@@ -1,5 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 
+import { Alert } from 'react-native';
+
 import { 
     Background, Container,
     List, Nome, Saldo, 
@@ -7,7 +9,7 @@ import {
 } from './styles';
 
 import firebase from '../../services/firebaseConnection';
-import { format } from 'date-fns';
+import { format, isPast } from 'date-fns';
 
 import { AuthContext } from '../../contexts/auth';
 import Header from '../../components/Header/index';
@@ -43,6 +45,7 @@ function Home() {
                         key: item.key,
                         type: item.val().type,
                         value: item.val().value,
+                        date: item.val().date,
                     };
                     console.log(list);
                     setHistorico(oldHistorico => [list, ...oldHistorico]);
@@ -52,6 +55,55 @@ function Home() {
 
         loadHist();
     },[]);
+
+
+    //Aciona confirmação para deletar
+
+    function handleDelete(data){
+        if(isPast(new Date(data?.date))){
+            alert('Você não pode deletar um registro antigo');
+            return;
+        }
+
+        Alert.alert(
+            'Cuidado, Atenção!',
+            ` Você deseja excluir:\n\n ${data?.type[0].toUpperCase() + data?.type.slice(1)} - Valor R$${data?.value.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}?`,
+            [
+                {
+                    text: 'Cancelar',
+                    style: 'cancel',
+                },
+                {
+                    text: 'Continuar',
+                    onPress: ()=> handleItemDelete(data),
+                },
+            ],
+        );
+
+    }
+
+    //deleta o item no banco de dados
+
+    async function handleItemDelete(data){
+        await firebase.database().ref('history').child(uid)
+        .child(data?.key).remove()
+        .then(async()=>{
+            let newSaldo = saldo;
+
+            data?.type ==='receita'?
+            newSaldo -= parseFloat(data?.value):
+            newSaldo += parseFloat(data?.value);
+
+            await firebase.database().ref('users').child(uid)
+            .child('saldo').set(newSaldo)
+            .catch((error)=>{
+                console.log(error);
+            });
+        })
+        .catch((error)=>{
+            console.log(error);
+        });
+    }
 
     return (
         <Background>
@@ -69,6 +121,7 @@ function Home() {
                 renderItem={({item})=>(
                     <HistoricoItem 
                         data={item}
+                        deleteItem={handleDelete}
                     />
                 )}
             />

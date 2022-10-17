@@ -10,6 +10,9 @@ export const Container = styled.View`
     border-radius: 10px;
 `;
 
+export const DeleteContainer = styled.TouchableOpacity`
+`;
+
 export const IconView = styled.View`
     flex-direction: row;
     padding-top: 3px;
