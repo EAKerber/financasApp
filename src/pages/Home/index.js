@@ -9,7 +9,7 @@ import {
 } from './styles';
 
 import firebase from '../../services/firebaseConnection';
-import { format, isPast } from 'date-fns';
+import { format, isBefore } from 'date-fns';
 
 import { AuthContext } from '../../contexts/auth';
 import Header from '../../components/Header/index';
@@ -30,7 +30,7 @@ function Home() {
 
         async function loadHist(){
             setHistorico([]);
-            let date = format(new Date(), 'dd/MM/yy');
+            let date = format(new Date(), 'dd/MM/yyyy');
             //saldo
             await firebase.database().ref('users').child(uid).on('value', (snapshot)=>{
                 setSaldo(snapshot.val().saldo);
@@ -60,7 +60,21 @@ function Home() {
     //Aciona confirmação para deletar
 
     function handleDelete(data){
-        if(isPast(new Date(data?.date))){
+
+        //Formatando data do item
+
+        let [iD, iM, iY] = data?.date.split('/');
+        let enItemDate = new Date(`${iY}-${iM}-${iD}`);
+
+        //Formatando data de hoje
+
+        let newDateFormat = format(new Date(), 'dd/MM/yyyy');
+        let [nD, nM, nY] = newDateFormat.split('/');
+        let newDate = new Date(`${nY}-${nM}-${nD}`);
+
+        //console.log(enItemDate, newDate);
+
+        if(isBefore(enItemDate, newDate)){
             alert('Você não pode deletar um registro antigo');
             return;
         }

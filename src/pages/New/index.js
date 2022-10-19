@@ -61,7 +61,7 @@ function New() {
         await firebase.database().ref('history').child(uid).child(key).set({
             value: parseFloat(value),
             type: type,
-            date: format(new Date(), 'dd/MM/yy'),
+            date: format(new Date(), 'dd/MM/yyyy'),
         }).catch((error)=>{
             console.log(error);
         });

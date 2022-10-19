@@ -3,9 +3,9 @@ import React from 'react';
 import Icon from 'react-native-vector-icons/Feather';
 
 import {
-    Container, DeleteContainer,
-    IconView, TipoView, TipoText,
-    ValorText,
+    Container, DateText, 
+    DeleteContainer, IconView, 
+    TipoView, TipoText, ValorText,
 } from './styles';
 
 function HistoricoItem({ data, deleteItem }) {
@@ -23,6 +23,9 @@ function HistoricoItem({ data, deleteItem }) {
                         />
                         <TipoText>{data?.type}</TipoText>
                     </IconView>
+
+                    <DateText>{data?.date}</DateText>
+
                 </TipoView>
 
                 <ValorText>

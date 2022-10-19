@@ -10,6 +10,13 @@ export const Container = styled.View`
     border-radius: 10px;
 `;
 
+export const DateText = styled.Text`
+    color: #151515;
+    margin-left: 5px;
+    font-size: 15px;
+    font-style: italic;
+    font-weight: 450;
+`;
 export const DeleteContainer = styled.TouchableOpacity`
 `;
 
@@ -27,6 +34,7 @@ export const IconView = styled.View`
 
 export const TipoView = styled.View`
     flex-direction: row;
+    justify-content: space-between;
 `;
 
 export const TipoText = styled.Text`
