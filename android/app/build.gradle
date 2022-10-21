@@ -253,6 +253,10 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
 
+    //datetimepicker
+    implementation project(':@react-native-community_datetimepicker')
+
+
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
 

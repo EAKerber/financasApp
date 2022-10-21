@@ -1,19 +1,23 @@
 import React, { useContext, useState, useEffect } from 'react';
 
-import { Alert } from 'react-native';
+import { Alert, Platform, ActivityIndicator } from 'react-native';
 
 import { 
     Background, Container,
-    List, Nome, Saldo, 
-    Title,
+    FilterArea, FilterButton,
+    List, LoadingIndicator, 
+    Nome, NotFoundText, Saldo, 
+    Title, ViewReplaceList, 
 } from './styles';
 
 import firebase from '../../services/firebaseConnection';
 import { format, isBefore } from 'date-fns';
+import  Icon  from 'react-native-vector-icons/MaterialIcons';
 
 import { AuthContext } from '../../contexts/auth';
 import Header from '../../components/Header/index';
 import HistoricoItem from '../../components/HistoricoItem/index';
+import DatePicker from '../../components/DatePicker';
 
 function Home() {
 
@@ -21,6 +25,11 @@ function Home() {
 
     const [historico, setHistorico] = useState([]);
     const [saldo, setSaldo] = useState(null);
+
+    const [formatedDate, setFormatedDate] = useState(format(new Date(), 'dd/MM/yyyy'));
+    const [showCalendar, setShowCalendar] = useState(false);
+
+    const [loadingInfo, setLoadingInfo] = useState(true);
 
     const uid = user&&user.uid;
 
@@ -30,16 +39,19 @@ function Home() {
 
         async function loadHist(){
             setHistorico([]);
-            let date = format(new Date(), 'dd/MM/yyyy');
+            setLoadingInfo(true);
             //saldo
             await firebase.database().ref('users').child(uid).on('value', (snapshot)=>{
                 setSaldo(snapshot.val().saldo);
             });
             //histórico
             await firebase.database().ref('history').child(uid)
-            .orderByChild('date').equalTo(date)
+            .orderByChild('date').equalTo(formatedDate)
             .limitToLast(10).on('value', (snapshot)=>{
                 setHistorico([]);
+                let listSize = snapshot.numChildren();
+                console.log(listSize);
+                let counter = 0;
                 snapshot.forEach((item)=>{
                     let list = {
                         key: item.key,
@@ -47,14 +59,16 @@ function Home() {
                         value: item.val().value,
                         date: item.val().date,
                     };
+                    counter++;
                     console.log(list);
                     setHistorico(oldHistorico => [list, ...oldHistorico]);
                 });
+                counter>=listSize&&(counter>0?setLoadingInfo(false):setLoadingInfo(null));
             });
         }
 
         loadHist();
-    },[]);
+    },[formatedDate]);
 
 
     //Aciona confirmação para deletar
@@ -119,6 +133,25 @@ function Home() {
         });
     }
 
+    //mostrar calendário para filtro por data
+
+    function handleShowCalendar(){
+        setShowCalendar(true);
+    }
+
+    //fechar calendário
+
+    function handleCloseCalendar(){
+        setShowCalendar(false);
+    }
+
+    //mudar data
+
+    async function handleChangeDate(date){
+        setShowCalendar(Platform.OS === 'ios');
+        setFormatedDate(format(date, 'dd/MM/yyyy'));     
+    }
+
     return (
         <Background>
             <Header/>
@@ -126,19 +159,55 @@ function Home() {
                 <Nome>{user&&user.nome}</Nome>
                 <Saldo>R$ {saldo&&saldo.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}</Saldo>
             </Container>
-            <Title>Ultimas Movimentações</Title>
+            <FilterArea>
+                <Title>Últimas Movimentações - {formatedDate}</Title>
+                <FilterButton
+                    onPress={handleShowCalendar}
+                >
+                    <Icon name='event' color='#fff' size={25} />
+                </FilterButton>
+            </FilterArea>
             
-            <List
-                showsVerticalScrollIndicator={false}
-                data={historico}
-                keyExtractor={ item => item.key }
-                renderItem={({item})=>(
-                    <HistoricoItem 
-                        data={item}
-                        deleteItem={handleDelete}
+            {
+                loadingInfo?
+                (   
+                    <ViewReplaceList
+                        notFound={false}
+                    >
+                        <LoadingIndicator/>
+                    </ViewReplaceList>
+                ):
+                (loadingInfo === null?
+
+                    <ViewReplaceList
+                        notFound={true}
+                    >
+                        <NotFoundText>
+                            Não encontramos nenhum registro correspondente à data pesquisada {'('+formatedDate+').'}
+                        </NotFoundText>
+                    </ViewReplaceList>
+
+                 :            
+                    <List
+                        showsVerticalScrollIndicator={false}
+                        data={historico}
+                        keyExtractor={ item => item.key }
+                        renderItem={({item})=>(
+                            <HistoricoItem 
+                                data={item}
+                                deleteItem={handleDelete}
+                            />
+                        )}
                     />
-                )}
-            />
+                )
+            }
+            {
+                showCalendar&&
+                (<DatePicker
+                    onClose={handleCloseCalendar}
+                    onChange={handleChangeDate}
+                />)
+            }
         </Background>
     );
 }
