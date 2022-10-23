@@ -68,7 +68,7 @@ function Home() {
         }
 
         loadHist();
-    },[formatedDate]);
+    },[formatedDate, saldo]);
 
 
     //Aciona confirmação para deletar
